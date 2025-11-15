@@ -1,0 +1,5 @@
+
+#checkout-summary-items li {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+  padding-block: 0.25rem;
+}
