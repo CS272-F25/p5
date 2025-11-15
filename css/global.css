@@ -1,11 +1,14 @@
+
 :root {
+  --pp-primary: #0077b6;
+  --pp-primary-soft: #cce6f7;
+  --pp-accent: #f4a261;
   --pp-bg: #f8fafc;
   --pp-text: #1f2933;
+  --pp-muted: #6b7280;
 }
 
-/* 讓畫面至少有高度，不會 footer 黏上來 */
-html,
-body {
+html, body {
   height: 100%;
 }
 
@@ -15,12 +18,27 @@ body {
   color: var(--pp-text);
 }
 
-/* 主要內容區，留一點空間 */
+.site-header .navbar-brand .logo-paw {
+  font-size: 1.5rem;
+}
+
 .site-main {
   min-height: 60vh;
 }
 
-/* Skip link 無障礙用 */
+.hero {
+  background: linear-gradient(135deg, var(--pp-primary-soft), #ffffff);
+}
+
+.hero-img {
+  max-height: 360px;
+  object-fit: cover;
+}
+
+.site-footer {
+  background-color: #ffffff;
+}
+
 .skip-link {
   position: absolute;
   left: 0;
@@ -31,16 +49,15 @@ body {
   z-index: 1000;
   text-decoration: none;
 }
-
 .skip-link:focus {
   top: 0;
 }
 
-/* header / footer 簡單樣式（之後可以再調） */
-.site-header {
-  background-color: #ffffff;
+meter {
+  width: 100%;
 }
 
-.site-footer {
-  background-color: #ffffff;
+/* Utility classes for cards and spacing */
+.card {
+  border-radius: 1rem;
 }

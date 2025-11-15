@@ -1,2 +1,4 @@
-/* Home page specific styles will be added in later commits. */
 
+.hero .badge + .badge {
+  margin-left: 0.5rem;
+}
