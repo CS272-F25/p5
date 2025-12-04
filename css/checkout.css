@@ -3,3 +3,16 @@
   border-bottom: 1px solid rgba(148, 163, 184, 0.4);
   padding-block: 0.25rem;
 }
+
+/* Visually mimic Bootstrap's h5 style for legend and the aside's h2 */
+legend,
+aside .card-body h2 {
+  font-size: 1.25rem; /* Equivalent to Bootstrap h5 */
+  font-weight: 500;   /* Equivalent to Bootstrap h5 */
+  line-height: 1.2;
+}
+
+/* Ensure legend has proper margin-bottom, mimicking Bootstrap's heading margin */
+legend {
+  margin-bottom: 0.5rem;
+}
