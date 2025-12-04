@@ -126,3 +126,47 @@ meter {
 .text-muted {
   color: var(--pp-muted) !important;
 }
+
+/* Custom styles for range input */
+input[type="range"] {
+  -webkit-appearance: none; /* Hides the default slider */
+  width: 100%; /* Full-width */
+  height: 8px; /* Specify a height for the slider track */
+  background: var(--pp-primary-soft); /* Track background */
+  outline: none;
+  border-radius: 4px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Hides the default slider thumb */
+  width: 20px; /* Set a specific slider thumb width */
+  height: 20px; /* Slider thumb height */
+  background: var(--pp-primary); /* Slider thumb color */
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -6px; /* Adjust thumb position */
+  box-shadow: 0 0 2px rgba(0,0,0,0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px; /* Set a specific slider thumb width */
+  height: 20px; /* Slider thumb height */
+  background: var(--pp-primary); /* Slider thumb color */
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 2px rgba(0,0,0,0.2);
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  background: var(--pp-primary-soft);
+  border-radius: 4px;
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  background: var(--pp-primary-soft);
+  border-radius: 4px;
+}
