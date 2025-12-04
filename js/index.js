@@ -18,13 +18,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       const col = document.createElement("div");
       col.className = "col-md-4";
       col.innerHTML = `
-        <article class="card h-100">
+        <article class="product-card">
           <img src="${product.image}" class="card-img-top" alt="${product.name}" width="300" height="200" style="object-fit: cover;">
-          <div class="card-body d-flex flex-column">
-            <h3 class="card-title h5">${product.name}</h3>
-            <p class="card-text small text-muted mb-1">${product.petTypeLabel} • ${product.categoryLabel}</p>
-            <p class="fw-bold mb-3">${formatPrice(product.price)}</p>
-            <div class="mt-auto d-flex gap-2">
+          <div class="product-card-body">
+            <h3 class="product-card-title">${product.name}</h3>
+            <p class="product-card-meta">${product.petTypeLabel} • ${product.categoryLabel}</p>
+            <p class="product-card-price">${formatPrice(product.price)}</p>
+            <div class="product-card-actions">
               <a href="product.html?id=${encodeURIComponent(product.id)}" class="btn btn-outline-secondary btn-sm">View details</a>
               <button type="button" class="btn btn-primary btn-sm" data-product-id="${product.id}">Add to cart</button>
             </div>

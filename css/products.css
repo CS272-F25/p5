@@ -1,5 +1,47 @@
 
-#product-list .card-img-top {
+.product-card {
+  /* Inherit global card styling from global.css */
+  /* Add h-100 equivalent */
+  height: 100%;
+}
+
+.product-card .card-img-top {
   height: 180px;
   object-fit: cover;
+}
+
+.product-card-body {
+  display: flex;
+  flex-direction: column;
+  /* Inherit padding from Bootstrap's .card-body if necessary, or define explicitly */
+  padding: 1rem; /* Bootstrap default padding */
+}
+
+.product-card-title {
+  font-size: 1.25rem; /* h5 equivalent */
+  font-weight: 500;   /* h5 equivalent */
+  line-height: 1.2;   /* h5 equivalent */
+  margin-bottom: 0.5rem; /* Bootstrap h5 margin-bottom */
+}
+
+.product-card-meta {
+  font-size: 0.875em; /* small equivalent */
+  color: var(--bs-text-muted); /* text-muted equivalent */
+  margin-bottom: 0.25rem; /* mb-1 equivalent */
+}
+
+.product-card-text {
+  font-size: 0.875em; /* small equivalent */
+  flex-grow: 1;       /* flex-grow-1 equivalent */
+}
+
+.product-card-price {
+  font-weight: 700; /* fw-bold equivalent */
+  margin-bottom: 1rem; /* mb-3 equivalent */
+}
+
+.product-card-actions {
+  margin-top: auto;   /* mt-auto equivalent */
+  display: flex;      /* d-flex equivalent */
+  gap: 0.5rem;        /* gap-2 equivalent */
 }
