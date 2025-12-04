@@ -1,8 +1,10 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-  --pp-primary: #0077b6;
-  --pp-primary-soft: #cce6f7;
-  --pp-accent: #f4a261;
+  --pp-primary: #1a73e8; /* A more vibrant blue */
+  --pp-primary-soft: #e8f0fe;
+  --pp-accent: #f57c00; /* A slightly deeper orange */
   --pp-bg: #f8fafc;
   --pp-text: #1f2933;
   --pp-muted: #6b7280;
@@ -13,13 +15,18 @@ html, body {
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-color: var(--pp-bg);
   color: var(--pp-text);
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600; /* Slightly bolder headings */
+  line-height: 1.3;
+}
+
 .site-header .navbar-brand .logo-paw {
-  font-size: 1.5rem;
+  font-size: 1.75rem; /* Slightly larger paw icon */
 }
 
 .site-main {
@@ -37,6 +44,7 @@ body {
 
 .site-footer {
   background-color: #ffffff;
+  border-top: 1px solid var(--pp-primary-soft) !important; /* Use soft primary for border */
 }
 
 .skip-link {
@@ -44,7 +52,7 @@ body {
   left: 0;
   top: -40px;
   padding: 0.5rem 1rem;
-  background: #000;
+  background: var(--pp-primary); /* Use primary color */
   color: #fff;
   z-index: 1000;
   text-decoration: none;
@@ -57,7 +65,36 @@ meter {
   width: 100%;
 }
 
-/* Utility classes for cards and spacing */
+/* Custom styles for cards */
 .card {
   border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08); /* Subtle border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom styles for primary buttons */
+.btn-primary {
+  background-color: var(--pp-primary);
+  border-color: var(--pp-primary);
+  --bs-btn-hover-bg: #1565c0; /* Darker shade of primary for hover */
+  --bs-btn-hover-border-color: #1565c0;
+  --bs-btn-active-bg: #0d47a1; /* Even darker for active */
+  --bs-btn-active-border-color: #0d47a1;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--pp-primary);
+  --bs-btn-border-color: var(--pp-primary);
+  --bs-btn-hover-bg: var(--pp-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-bg: var(--pp-primary);
+  --bs-btn-active-border-color: var(--pp-primary);
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
 }
