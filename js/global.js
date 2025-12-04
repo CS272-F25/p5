@@ -1,4 +1,6 @@
 
+import { isLoggedIn, logoutUser } from "./auth.js";
+
 export const CART_KEY = "petpantry-cart";
 export const REVIEW_KEY = "petpantry-reviews";
 export const CONTACT_KEY = "petpantry-contact-messages";
@@ -47,7 +49,40 @@ export function formatPrice(amount) {
   return `$${amount.toFixed(2)}`;
 }
 
-// Initial cart badge update when the DOM is ready
+function updateAuthLinks() {
+  const authLinksContainer = document.getElementById("auth-links");
+  if (!authLinksContainer) return;
+
+  if (isLoggedIn()) {
+    authLinksContainer.innerHTML = `
+      <li class="nav-item">
+        <a class="nav-link" href="account.html">My Account</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" id="logout-link">Log Out</a>
+      </li>
+    `;
+    const logoutLink = document.getElementById("logout-link");
+    if (logoutLink) {
+      logoutLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        logoutUser();
+      });
+    }
+  } else {
+    authLinksContainer.innerHTML = `
+      <li class="nav-item">
+        <a class="nav-link" href="login.html">Log In</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="register.html">Register</a>
+      </li>
+    `;
+  }
+}
+
+// Initial updates when the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
+  updateAuthLinks();
 });
