@@ -1,4 +1,6 @@
 
+import { REVIEW_KEY } from "./global.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("review-form");
   const list = document.getElementById("review-list");
@@ -8,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const raw = localStorage.getItem(REVIEW_KEY);
       return raw ? JSON.parse(raw) : [];
     } catch (e) {
-      console.error(e);
+      console.error("Error reading reviews:", e);
       return [];
     }
   }

@@ -1,4 +1,7 @@
 
+import { fetchProducts } from "./data.js";
+import { formatPrice, addToCart } from "./global.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const products = await fetchProducts();
@@ -6,12 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("featured-products");
     if (!container) return;
 
+    if (featured.length === 0) {
+      container.innerHTML = `<p class="text-muted">No featured products available.</p>`;
+      return;
+    }
+
     featured.forEach((product) => {
       const col = document.createElement("div");
       col.className = "col-md-4";
       col.innerHTML = `
         <article class="card h-100">
-          <img src="${product.image}" class="card-img-top" alt="${product.name}">
+          <img src="${product.image}" class="card-img-top" alt="${product.name}" width="300" height="200" style="object-fit: cover;">
           <div class="card-body d-flex flex-column">
             <h3 class="card-title h5">${product.name}</h3>
             <p class="card-text small text-muted mb-1">${product.petTypeLabel} • ${product.categoryLabel}</p>
@@ -33,6 +41,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       addToCart(productId, 1);
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to fetch products for index page:", error);
+    const container = document.getElementById("featured-products");
+    if (container) {
+      container.innerHTML = `<p class="text-danger">Error loading featured products. Please try again later.</p>`;
+    }
   }
 });

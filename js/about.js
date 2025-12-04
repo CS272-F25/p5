@@ -1,4 +1,6 @@
 
+import { CONTACT_KEY } from "./global.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contact-form");
   const status = document.getElementById("contact-message-status");
@@ -8,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const raw = localStorage.getItem(CONTACT_KEY);
       return raw ? JSON.parse(raw) : [];
     } catch (e) {
-      console.error(e);
+      console.error("Error reading contact messages:", e);
       return [];
     }
   }

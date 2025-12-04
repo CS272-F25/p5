@@ -1,168 +1,14 @@
 
-const CART_KEY = "petpantry-cart";
-const REVIEW_KEY = "petpantry-reviews";
-const CONTACT_KEY = "petpantry-contact-messages";
+export const CART_KEY = "petpantry-cart";
+export const REVIEW_KEY = "petpantry-reviews";
+export const CONTACT_KEY = "petpantry-contact-messages";
 
-// Embed product data directly so the site works over file:// without a server
-const PRODUCTS = [
-  {
-    "id": "dog-food-1",
-    "name": "Grain-Free Chicken & Sweet Potato Kibble",
-    "petType": "dog",
-    "petTypeLabel": "Dog",
-    "category": "food",
-    "categoryLabel": "Dry food",
-    "price": 29.99,
-    "size": "12 lb bag",
-    "flavor": "Chicken & Sweet Potato",
-    "bestFor": "Adult dogs of all breeds",
-    "shortDescription": "High-protein, grain-free kibble for everyday energy.",
-    "longDescription": "This grain-free chicken and sweet potato recipe is crafted with real poultry as the first ingredient. It supports healthy digestion and everyday activity for adult dogs.",
-    "image": "https://images.pexels.com/photos/7210260/pexels-photo-7210260.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tags": [
-      "grain-free",
-      "chicken",
-      "adult"
-    ]
-  },
-  {
-    "id": "dog-treat-1",
-    "name": "Soft Training Bites - Peanut Butter",
-    "petType": "dog",
-    "petTypeLabel": "Dog",
-    "category": "toy",
-    "categoryLabel": "Treats",
-    "price": 9.99,
-    "size": "8 oz pouch",
-    "flavor": "Peanut Butter",
-    "bestFor": "Puppies and adult dogs",
-    "shortDescription": "Soft, bite-sized treats perfect for training sessions.",
-    "longDescription": "Reward good behavior with these soft training bites. Small pieces and a strong peanut butter aroma keep your dog motivated.",
-    "image": "https://images.pexels.com/photos/7210269/pexels-photo-7210269.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tags": [
-      "training",
-      "soft treats"
-    ]
-  },
-  {
-    "id": "cat-food-1",
-    "name": "Indoor Hairball Control Salmon Recipe",
-    "petType": "cat",
-    "petTypeLabel": "Cat",
-    "category": "food",
-    "categoryLabel": "Dry food",
-    "price": 24.99,
-    "size": "8 lb bag",
-    "flavor": "Salmon",
-    "bestFor": "Indoor adult cats",
-    "shortDescription": "Balanced kibble to support hairball control and weight.",
-    "longDescription": "Made for indoor cats, this salmon recipe supports hairball control and helps maintain a healthy weight with balanced fiber.",
-    "image": "https://images.pexels.com/photos/6869632/pexels-photo-6869632.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tags": [
-      "indoor",
-      "hairball",
-      "salmon"
-    ]
-  },
-  {
-    "id": "cat-toy-1",
-    "name": "Feather Wand Teaser Toy",
-    "petType": "cat",
-    "petTypeLabel": "Cat",
-    "category": "toy",
-    "categoryLabel": "Interactive toy",
-    "price": 7.99,
-    "size": "24 inch wand",
-    "flavor": "N/A",
-    "bestFor": "Playful cats and kittens",
-    "shortDescription": "Feather teaser wand for interactive playtime.",
-    "longDescription": "Encourage exercise and bonding time with this feather wand. Great for stalking, pouncing, and chasing.",
-    "image": "https://images.pexels.com/photos/6869642/pexels-photo-6869642.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tags": [
-      "toy",
-      "interactive",
-      "feather"
-    ]
-  },
-  {
-    "id": "smallpet-food-1",
-    "name": "Timothy Hay Blend for Small Pets",
-    "petType": "small-pet",
-    "petTypeLabel": "Small pet",
-    "category": "food",
-    "categoryLabel": "Hay",
-    "price": 16.99,
-    "size": "5 lb bag",
-    "flavor": "Timothy",
-    "bestFor": "Rabbits, guinea pigs, chinchillas",
-    "shortDescription": "Fresh timothy hay to support dental and digestive health.",
-    "longDescription": "High-fiber timothy hay harvested for optimal freshness. Helps support dental wear and digestive health in small herbivores.",
-    "image": "https://images.pexels.com/photos/5255225/pexels-photo-5255225.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tags": [
-      "hay",
-      "small pet"
-    ]
-  },
-  {
-    "id": "dog-groom-1",
-    "name": "Soothing Oatmeal Dog Shampoo",
-    "petType": "dog",
-    "petTypeLabel": "Dog",
-    "category": "grooming",
-    "categoryLabel": "Shampoo",
-    "price": 12.49,
-    "size": "16 fl oz",
-    "flavor": "Oatmeal & Aloe",
-    "bestFor": "Dogs with dry or sensitive skin",
-    "shortDescription": "Gentle formula with oatmeal and aloe for dry skin.",
-    "longDescription": "This gentle shampoo helps relieve itchy, dry skin while leaving coats soft and clean. Soap-free and lightly scented.",
-    "image": "https://images.pexels.com/photos/7210530/pexels-photo-7210530.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tags": [
-      "grooming",
-      "oatmeal"
-    ]
-  },
-  {
-    "id": "cat-accessory-1",
-    "name": "Cozy Window-Mount Cat Bed",
-    "petType": "cat",
-    "petTypeLabel": "Cat",
-    "category": "accessory",
-    "categoryLabel": "Bed",
-    "price": 34.99,
-    "size": "18 x 12 inches",
-    "flavor": "N/A",
-    "bestFor": "Cats who love sunny naps",
-    "shortDescription": "Space-saving cat bed that mounts to your window.",
-    "longDescription": "Give your cat a sunny perch with this window-mount bed. Strong suction cups and soft bedding keep naps comfortable and secure.",
-    "image": "https://images.pexels.com/photos/6869646/pexels-photo-6869646.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tags": [
-      "bed",
-      "window"
-    ]
-  },
-  {
-    "id": "smallpet-accessory-1",
-    "name": "Hideaway Tunnel for Small Pets",
-    "petType": "small-pet",
-    "petTypeLabel": "Small pet",
-    "category": "accessory",
-    "categoryLabel": "Habitat accessory",
-    "price": 13.99,
-    "size": "Tunnel: 16 inches long",
-    "flavor": "N/A",
-    "bestFor": "Rabbits, guinea pigs, ferrets",
-    "shortDescription": "Soft tunnel hideaway for cozy naps and play.",
-    "longDescription": "This collapsible tunnel adds enrichment to your small pet's habitat, offering a secure spot to hide, play, and explore.",
-    "image": "https://images.pexels.com/photos/5255210/pexels-photo-5255210.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tags": [
-      "tunnel",
-      "hideaway"
-    ]
-  }
-];
+export const CONFIG = {
+  SHIPPING_THRESHOLD: 49,
+  SHIPPING_COST: 4.99,
+};
 
-function getCart() {
+export function getCart() {
   try {
     const raw = localStorage.getItem(CART_KEY);
     return raw ? JSON.parse(raw) : [];
@@ -172,12 +18,12 @@ function getCart() {
   }
 }
 
-function saveCart(cart) {
+export function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
   updateCartBadge(cart);
 }
 
-function updateCartBadge(cart = null) {
+export function updateCartBadge(cart = null) {
   if (!cart) cart = getCart();
   const count = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
   const badge = document.getElementById("cart-count-badge");
@@ -186,7 +32,7 @@ function updateCartBadge(cart = null) {
   }
 }
 
-function addToCart(productId, quantity = 1) {
+export function addToCart(productId, quantity = 1) {
   const cart = getCart();
   const existing = cart.find((item) => item.productId === productId);
   if (existing) {
@@ -197,15 +43,11 @@ function addToCart(productId, quantity = 1) {
   saveCart(cart);
 }
 
-// Replacement for fetchProducts that just returns the embedded PRODUCTS array
-async function fetchProducts() {
-  return PRODUCTS;
-}
-
-function formatPrice(amount) {
+export function formatPrice(amount) {
   return `$${amount.toFixed(2)}`;
 }
 
+// Initial cart badge update when the DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
 });

@@ -1,4 +1,7 @@
 
+import { fetchProducts } from "./data.js";
+import { getCart, saveCart, formatPrice, CONFIG } from "./global.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
   const cartEmpty = document.getElementById("cart-empty");
   const cartContents = document.getElementById("cart-contents");
@@ -11,7 +14,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     products = await fetchProducts();
   } catch (error) {
-    console.error(error);
+    console.error("Failed to fetch products for cart:", error);
+    // Optionally display an error message to the user
+    cartEmpty.textContent = "Error loading products. Please try again later.";
+    cartEmpty.classList.remove("d-none");
+    cartContents.classList.add("d-none");
+    return;
   }
 
   function render() {
@@ -29,7 +37,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     cart.forEach((item) => {
       const product = products.find((p) => p.id === item.productId);
-      if (!product) return;
+      if (!product) return; // Skip if product not found
+
       const lineTotal = product.price * item.quantity;
       subtotal += lineTotal;
 
@@ -37,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       tr.innerHTML = `
         <td>
           <div class="d-flex align-items-center gap-3">
-            <img src="${product.image}" alt="${product.name}">
+            <img src="${product.image}" alt="${product.name}" width="60" height="60" class="rounded">
             <div>
               <a href="product.html?id=${encodeURIComponent(product.id)}" class="link-dark fw-semibold">${product.name}</a>
               <div class="small text-muted">${product.petTypeLabel}</div>
@@ -62,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       tbody.appendChild(tr);
     });
 
-    const shipping = subtotal > 0 && subtotal < 49 ? 4.99 : 0;
+    const shipping = subtotal > 0 && subtotal < CONFIG.SHIPPING_THRESHOLD ? CONFIG.SHIPPING_COST : 0;
     const total = subtotal + shipping;
 
     itemsEl.textContent = formatPrice(subtotal);

@@ -1,4 +1,7 @@
 
+import { fetchProducts } from "./data.js";
+import { getCart, saveCart, formatPrice } from "./global.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("checkout-form");
   const message = document.getElementById("checkout-message");
@@ -9,7 +12,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     products = await fetchProducts();
   } catch (error) {
-    console.error(error);
+    console.error("Failed to fetch products for checkout:", error);
+    // Optionally display an error message to the user
+    itemsList.innerHTML = "<li class='small text-muted'>Error loading products.</li>";
+    totalEl.textContent = "$0.00";
+    return;
   }
 
   function renderSummary() {
@@ -24,7 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     let subtotal = 0;
     cart.forEach((item) => {
       const product = products.find((p) => p.id === item.productId);
-      if (!product) return;
+      if (!product) return; // Skip if product not found
+
       const lineTotal = product.price * item.quantity;
       subtotal += lineTotal;
 
@@ -36,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
       itemsList.appendChild(li);
     });
-    const shipping = subtotal > 0 && subtotal < 49 ? 4.99 : 0;
+    const shipping = subtotal > 0 && subtotal < 49 ? 4.99 : 0; // Hardcoded values to be moved to config
     const total = subtotal + shipping;
     totalEl.textContent = formatPrice(total);
   }

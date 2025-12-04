@@ -1,4 +1,7 @@
 
+import { fetchProducts } from "./data.js";
+import { formatPrice, addToCart } from "./global.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("product-detail");
   if (!container) return;
@@ -23,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.innerHTML = `
       <div class="col-md-6">
         <figure>
-          <img src="${product.image}" class="img-fluid rounded-4 product-image" alt="${product.name}">
+          <img src="${product.image}" class="img-fluid rounded-4 product-image" alt="${product.name}" width="500" height="500" style="object-fit: cover;">
           <figcaption class="mt-2 small text-muted">${product.petTypeLabel} • ${product.categoryLabel}</figcaption>
         </figure>
       </div>
@@ -49,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       addToCart(productId, 1);
     });
   } catch (error) {
-    console.error(error);
-    container.innerHTML = "<p class='text-danger'>Failed to load product details.</p>";
+    console.error("Failed to load product details:", error);
+    container.innerHTML = "<p class='text-danger'>Failed to load product details. Please try again later.</p>";
   }
 });

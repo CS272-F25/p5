@@ -1,4 +1,7 @@
 
+import { fetchProducts } from "./data.js";
+import { formatPrice, addToCart } from "./global.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
   const listEl = document.getElementById("product-list");
   const countEl = document.getElementById("product-count");
@@ -44,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       col.className = "col-md-4";
       col.innerHTML = `
         <article class="card h-100">
-          <img src="${product.image}" class="card-img-top" alt="${product.name}">
+          <img src="${product.image}" class="card-img-top" alt="${product.name}" width="300" height="200" style="object-fit: cover;">
           <div class="card-body d-flex flex-column">
             <h3 class="card-title h5">${product.name}</h3>
             <p class="card-text small text-muted mb-1">${product.petTypeLabel} • ${product.categoryLabel}</p>
@@ -91,7 +94,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       addToCart(productId, 1);
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to load products for product list page:", error);
     listEl.innerHTML = '<p class="text-danger">Failed to load products. Please try again later.</p>';
+    countEl.textContent = "0 products found.";
   }
 });
