@@ -1,13 +1,15 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
 :root {
-  --pp-primary: #1a73e8; /* A more vibrant blue */
-  --pp-primary-soft: #e8f0fe;
-  --pp-accent: #f57c00; /* A slightly deeper orange */
-  --pp-bg: #f8fafc;
-  --pp-text: #1f2933;
-  --pp-muted: #6b7280;
+  --pp-primary: #704214;       /* Main dark brown for actions */
+  --pp-primary-soft: #FBE2C8;  /* Light peach for section backgrounds */
+  --pp-accent: #f5b877;        /* Warm orange for accents */
+  --pp-special-accent: #F7C592; /* Sandy orange for specific highlights */
+  --pp-bg: #fdfdfb;            /* Soft off-white for main background */
+  --pp-text: #4A2F17;          /* Very dark brown for body text */
+  --pp-muted: #8a7d72;         /* Muted brown-gray for secondary text */
+  --pp-headings: #704214;      /* Main dark brown for headings */
 }
 
 html, body {
@@ -21,12 +23,18 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600; /* Slightly bolder headings */
+  font-weight: 700; /* Bolder headings for more contrast */
   line-height: 1.3;
+  color: var(--pp-headings);
 }
 
 .site-header .navbar-brand .logo-paw {
-  font-size: 1.75rem; /* Slightly larger paw icon */
+  font-size: 1.75rem;
+  color: var(--pp-accent); /* Use the warm orange for the paw */
+}
+
+#cart-count-badge {
+  background-color: var(--pp-primary);
 }
 
 .site-main {
@@ -34,7 +42,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero {
-  background: linear-gradient(135deg, var(--pp-primary-soft), #ffffff);
+  background: linear-gradient(135deg, var(--pp-primary-soft), var(--pp-bg));
 }
 
 .hero-img {
@@ -44,7 +52,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .site-footer {
   background-color: #ffffff;
-  border-top: 1px solid var(--pp-primary-soft) !important; /* Use soft primary for border */
+  border-top: 1px solid var(--pp-primary-soft) !important;
 }
 
 .skip-link {
@@ -52,7 +60,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   top: -40px;
   padding: 0.5rem 1rem;
-  background: var(--pp-primary); /* Use primary color */
+  background: var(--pp-primary);
   color: #fff;
   z-index: 1000;
   text-decoration: none;
@@ -68,8 +76,8 @@ meter {
 /* Custom styles for cards */
 .card {
   border-radius: 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.08); /* Subtle border */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
@@ -78,15 +86,16 @@ meter {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Custom styles for primary buttons */
+/* Custom styles for buttons to match the new theme */
 .btn-primary {
   background-color: var(--pp-primary);
   border-color: var(--pp-primary);
-  --bs-btn-hover-bg: #1565c0; /* Darker shade of primary for hover */
-  --bs-btn-hover-border-color: #1565c0;
-  --bs-btn-active-bg: #0d47a1; /* Even darker for active */
-  --bs-btn-active-border-color: #0d47a1;
-  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  color: #fff;
+  --bs-btn-hover-bg: #5a3510;
+  --bs-btn-hover-border-color: #5a3510;
+  --bs-btn-active-bg: var(--pp-text);
+  --bs-btn-active-border-color: var(--pp-text);
+  --bs-btn-focus-shadow-rgb: 245, 184, 119; /* From --pp-accent */
 }
 
 .btn-outline-primary {
@@ -96,5 +105,24 @@ meter {
   --bs-btn-hover-color: #fff;
   --bs-btn-active-bg: var(--pp-primary);
   --bs-btn-active-border-color: var(--pp-primary);
-  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-focus-shadow-rgb: 112, 66, 20; /* From --pp-primary */
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: var(--pp-primary);
+  --bs-btn-border-color: var(--pp-primary);
+  --bs-btn-hover-bg: var(--pp-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-bg: var(--pp-primary);
+  --bs-btn-active-border-color: var(--pp-primary);
+  --bs-btn-focus-shadow-rgb: 112, 66, 20; /* From --pp-primary */
+}
+
+.badge-shipping {
+  background-color: var(--pp-accent);
+  color: var(--pp-text);
+}
+
+.text-muted {
+  color: var(--pp-muted) !important;
 }
