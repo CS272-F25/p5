@@ -89,7 +89,7 @@
           <input type="range" class="form-range" id="filter-price" min="10" max="80" step="5" value="80" />
           <div class="d-flex justify-content-between small text-muted">
             <span>$10</span>
-            <span id="filter-price-value">$80</span>
+            <output id="filter-price-value" for="filter-price">$80</output>
           </div>
         </div>
         <div class="col-md-3">
@@ -103,6 +103,26 @@
         <div id="product-list" class="row g-4">
           <!-- Filled by products.js using product data -->
         </div>
+        <template id="product-card-template">
+          <div class="col-md-4">
+            <article class="product-card h-100" data-product-id="">
+              <div class="product-image-container">
+                <img src="" class="card-img-top" alt="" width="300" height="200" style="object-fit: cover;">
+                <button class="btn btn-light btn-sm quick-view-btn" data-product-id="">Quick View</button>
+              </div>
+              <div class="product-card-body d-flex flex-column">
+                <h3 class="product-card-title"></h3>
+                <p class="product-card-meta"></p>
+                <p class="product-card-text flex-grow-1"></p>
+                <p class="product-card-price"></p>
+                <footer class="product-card-actions mt-auto">
+                  <a href="#" class="btn btn-outline-secondary btn-sm product-details-link">View details</a>
+                  <button type="button" class="btn btn-primary btn-sm add-to-cart-btn" data-product-id="">Add to cart</button>
+                </footer>
+              </div>
+            </article>
+          </div>
+        </template>
       </section>
     </div>
   </section>

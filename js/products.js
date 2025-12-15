@@ -2,6 +2,21 @@
 import { fetchProducts } from "./data.js";
 import { formatPrice, addToCart, createFlyToCartAnimation } from "./global.js";
 
+/**
+ * Wraps all instances of a search term in a string with <mark> tags.
+ * @param {string} text - The text to highlight.
+ * @param {string} searchTerm - The term to search for.
+ * @returns {string} The text with the search term highlighted.
+ */
+function highlightText(text, searchTerm) {
+  if (!searchTerm) {
+    return text;
+  }
+  const regex = new RegExp(searchTerm, "gi"); // g for global, i for case-insensitive
+  return text.replace(regex, (match) => `<mark>${match}</mark>`);
+}
+
+
 document.addEventListener("DOMContentLoaded", async () => {
   const listEl = document.getElementById("product-list");
   const countEl = document.getElementById("product-count");
@@ -14,6 +29,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const quickViewModalEl = document.getElementById("quick-view-modal");
   const quickViewModal = new bootstrap.Modal(quickViewModalEl);
 
+  const productTemplate = document.getElementById("product-card-template");
+
   let products = [];
   let filtered = [];
 
@@ -21,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pet = petEl.value;
     const category = categoryEl.value;
     const maxPrice = Number(priceEl.value);
-    const searchTerm = searchEl.value.toLowerCase();
+    const searchTerm = searchEl.value.trim();
 
     filtered = products.filter((p) => {
       const matchesPet = pet === "all" || p.petType === pet;
@@ -29,8 +46,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const matchesPrice = p.price <= maxPrice;
       const matchesSearch =
         !searchTerm ||
-        p.name.toLowerCase().includes(searchTerm) ||
-        (p.tags || []).some((t) => t.toLowerCase().includes(searchTerm));
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.shortDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.tags || []).some((t) => t.toLowerCase().includes(searchTerm.toLowerCase()));
       return matchesPet && matchesCategory && matchesPrice && matchesSearch;
     });
 
@@ -44,33 +62,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       countEl.textContent = "0 products found.";
       return;
     }
+    const searchTerm = searchEl.value.trim();
 
     filtered.forEach((product) => {
-      const col = document.createElement("div");
-      col.className = "col-md-4";
-      col.innerHTML = `
-        <article class="product-card" data-product-id="${product.id}">
-          <div class="product-image-container">
-            <img src="${product.image}" class="card-img-top" alt="${product.name}" width="300" height="200" style="object-fit: cover;">
-            <button class="btn btn-light btn-sm quick-view-btn" data-product-id="${product.id}">Quick View</button>
-          </div>
-          <div class="product-card-body">
-            <h3 class="product-card-title">${product.name}</h3>
-            <p class="product-card-meta">${product.petTypeLabel} • ${product.categoryLabel}</p>
-            <p class="product-card-text">${product.shortDescription}</p>
-            <p class="product-card-price">${formatPrice(product.price)}</p>
-            <footer class="product-card-actions">
-              <a href="product.html?id=${encodeURIComponent(
-                product.id
-              )}" class="btn btn-outline-secondary btn-sm">View details</a>
-              <button type="button" class="btn btn-primary btn-sm add-to-cart-btn" data-product-id="${
-                product.id
-              }">Add to cart</button>
-            </div>
-          </div>
-        </article>
-      `;
-      listEl.appendChild(col);
+      const cardClone = productTemplate.content.cloneNode(true);
+      
+      const cardRoot = cardClone.querySelector(".product-card");
+      cardRoot.dataset.productId = product.id;
+
+      cardClone.querySelector(".product-image-container img").src = product.image;
+      cardClone.querySelector(".product-image-container img").alt = product.name;
+      cardClone.querySelector(".quick-view-btn").dataset.productId = product.id;
+      
+      cardClone.querySelector(".product-card-title").innerHTML = highlightText(product.name, searchTerm);
+      cardClone.querySelector(".product-card-meta").textContent = `${product.petTypeLabel} • ${product.categoryLabel}`;
+      cardClone.querySelector(".product-card-text").innerHTML = highlightText(product.shortDescription, searchTerm);
+      cardClone.querySelector(".product-card-price").textContent = formatPrice(product.price);
+      
+      cardClone.querySelector(".product-details-link").href = `product.html?id=${encodeURIComponent(product.id)}`;
+      cardClone.querySelector(".add-to-cart-btn").dataset.productId = product.id;
+      
+      listEl.appendChild(cardClone);
     });
 
     countEl.textContent = `${filtered.length} product${
@@ -93,6 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     [petEl, categoryEl, priceEl, searchEl].forEach((el) => {
       el.addEventListener("input", () => {
         if (el === priceEl && priceValueEl) {
+          priceValueEl.value = `$${priceEl.value}`; // For output tag, use .value
           priceValueEl.textContent = `$${priceEl.value}`;
         }
         applyFilters();
