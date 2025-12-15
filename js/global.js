@@ -67,6 +67,13 @@ export async function renderMiniCart() {
   if (!itemsContainer || !subtotalEl) return;
 
   const cart = getCart();
+
+  const summaryContainer = document.querySelector('.cart-dropdown-menu .p-2.border-top');
+  const oldProgress = summaryContainer?.querySelector('.shipping-progress-container');
+  if (oldProgress) {
+    oldProgress.remove();
+  }
+
   if (cart.length === 0) {
     itemsContainer.innerHTML = `<p class="text-center text-muted small p-2">Your cart is empty.</p>`;
     subtotalEl.textContent = formatPrice(0);
@@ -92,11 +99,44 @@ export async function renderMiniCart() {
           <span class="mini-cart-item-title">${product.name}</span>
           <span class="text-muted">${item.quantity} x ${formatPrice(product.price)}</span>
         </div>
+        <button type="button" class="btn-close btn-sm ms-auto mini-cart-remove-btn" data-product-id="${product.id}" aria-label="Remove item"></button>
       `;
       itemsContainer.appendChild(itemEl);
     });
 
     subtotalEl.textContent = formatPrice(subtotal);
+
+    // --- Free Shipping Progress Bar ---
+    if (!summaryContainer) return;
+
+    const freeShippingThreshold = CONFIG.SHIPPING_THRESHOLD;
+    let shippingProgressHtml = '';
+
+    if (subtotal > 0 && subtotal < freeShippingThreshold) {
+      const remainingToFreeShipping = freeShippingThreshold - subtotal;
+      const progressPercentage = (subtotal / freeShippingThreshold) * 100;
+      shippingProgressHtml = `
+        <p class="small text-center mb-1">
+          You're only <strong>${formatPrice(remainingToFreeShipping)}</strong> away from FREE shipping!
+        </p>
+        <div class="progress" style="height: 8px;">
+          <div class="progress-bar bg-success" role="progressbar" style="width: ${progressPercentage}%;" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      `;
+    } else if (subtotal >= freeShippingThreshold) {
+      shippingProgressHtml = `
+        <div class="text-center text-success small">
+          <strong class="text-success">🥳 You've earned FREE shipping!</strong>
+        </div>
+      `;
+    }
+
+    if(shippingProgressHtml) {
+      const progressWrapper = document.createElement('div');
+      progressWrapper.className = 'shipping-progress-container mb-2';
+      progressWrapper.innerHTML = shippingProgressHtml;
+      summaryContainer.prepend(progressWrapper);
+    }
   } catch (error) {
     console.error("Failed to render mini cart:", error);
     itemsContainer.innerHTML = `<p class="text-center text-danger small p-2">Could not load cart.</p>`;
@@ -130,6 +170,16 @@ export function addToCart(productId, quantity = 1) {
   } else {
     cart.push({ productId, quantity });
   }
+  saveCart(cart);
+}
+
+/**
+ * Removes an item completely from the cart.
+ * @param {string} productId - The ID of the product to remove.
+ */
+export function removeFromCart(productId) {
+  let cart = getCart();
+  cart = cart.filter(item => item.productId !== productId);
   saveCart(cart);
 }
 
@@ -235,16 +285,15 @@ document.addEventListener("DOMContentLoaded", () => {
   updateAuthLinks();
   renderMiniCart();
 
-  // Add hover listeners for the cart dropdown using Bootstrap's API for proper positioning
+  // Add hover listeners for the cart dropdown
   const cartDropdownContainer = document.getElementById("cart-dropdown-container");
-  const cartDropdownToggle = document.getElementById("cart-dropdown-toggle");
-  if (cartDropdownContainer && cartDropdownToggle) {
-    const dropdown = new bootstrap.Dropdown(cartDropdownToggle);
-
+  if (cartDropdownContainer) {
+    const dropdownMenu = cartDropdownContainer.querySelector(".dropdown-menu");
+    const dropdown = new bootstrap.Dropdown(cartDropdownContainer.querySelector(".dropdown-toggle"));
+    
     cartDropdownContainer.addEventListener("mouseenter", () => {
-      // Small delay to prevent accidental opening when just passing by
+      // Small delay to prevent accidental opening
       setTimeout(() => {
-        // Check if the mouse is still over the element
         if (cartDropdownContainer.matches(":hover")) {
           dropdown.show();
         }
@@ -253,19 +302,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cartDropdownContainer.addEventListener("mouseleave", () => {
       setTimeout(() => {
-        // Check if the mouse has not re-entered the dropdown menu itself
-        if (!cartDropdownContainer.querySelector(".dropdown-menu").matches(":hover")) {
+        if (!dropdownMenu.matches(":hover")) {
           dropdown.hide();
         }
       }, 100);
     });
-
-    // Also hide the dropdown if the mouse leaves the menu itself
-    const dropdownMenu = cartDropdownContainer.querySelector(".dropdown-menu");
-    if(dropdownMenu) {
-      dropdownMenu.addEventListener("mouseleave", () => {
+    
+    dropdownMenu.addEventListener("mouseleave", () => {
         dropdown.hide();
-      });
-    }
+    });
+  }
+
+  // Add click listener for removing items from mini cart
+  const miniCartItemsContainer = document.getElementById("mini-cart-items");
+  if (miniCartItemsContainer) {
+    miniCartItemsContainer.addEventListener("click", (event) => {
+      const removeButton = event.target.closest(".mini-cart-remove-btn");
+      if (removeButton) {
+        const productId = removeButton.getAttribute("data-product-id");
+        removeFromCart(productId);
+      }
+    });
   }
 });
