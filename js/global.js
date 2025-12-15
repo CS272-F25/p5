@@ -86,6 +86,57 @@ export function addToCart(productId, quantity = 1) {
 }
 
 /**
+ * Creates and manages a "fly-to-cart" animation.
+ * This function is designed to work from both product cards and the product detail page.
+ * @param {HTMLElement} startElement - The element that triggered the animation (e.g., the 'Add to cart' button).
+ */
+export function createFlyToCartAnimation(startElement) {
+  let productImg;
+  const productCard = startElement.closest(".product-card");
+  const detailContainer = startElement.closest("#product-detail");
+
+  if (productCard) {
+    // Strategy 1: We are on a card
+    productImg = productCard.querySelector("img");
+  } else if (detailContainer) {
+    // Strategy 2: We are on the product detail page
+    productImg = detailContainer.querySelector(".product-image");
+  }
+
+  if (!productImg) return; // Could not find an image to animate
+
+  const cartIcon = document.querySelector('a[href="cart.html"]');
+  if (!cartIcon) return; // Could not find the cart icon
+
+  const startRect = productImg.getBoundingClientRect();
+  const endRect = cartIcon.getBoundingClientRect();
+
+  const clone = productImg.cloneNode(true);
+  clone.classList.add("flying-product-clone");
+
+  // Set initial position
+  clone.style.top = `${startRect.top}px`;
+  clone.style.left = `${startRect.left}px`;
+  clone.style.width = `${startRect.width}px`;
+  clone.style.height = `${startRect.height}px`;
+
+  document.body.appendChild(clone);
+
+  // Use a short timeout to allow the browser to paint the initial state before transitioning
+  setTimeout(() => {
+    clone.style.top = `${endRect.top + endRect.height / 2}px`;
+    clone.style.left = `${endRect.left + endRect.width / 2}px`;
+    clone.style.transform = "scale(0)"; // Shrink the image as it flies
+    clone.style.opacity = "0.5";
+  }, 10);
+
+  // Remove the clone after the animation is complete
+  setTimeout(() => {
+    clone.remove();
+  }, 510); // Matches the transition duration
+}
+
+/**
  * Formats a numeric amount into a currency string (e.g., "$12.34").
  * @param {number} amount - The amount to format.
  * @returns {string} The formatted currency string.

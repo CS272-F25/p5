@@ -1,6 +1,6 @@
 
 import { fetchProducts } from "./data.js";
-import { formatPrice, addToCart } from "./global.js";
+import { formatPrice, addToCart, createFlyToCartAnimation } from "./global.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("product-detail");
@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    // Give the parent a class to make the image easier to find
+    container.className = "row g-4";
     container.innerHTML = `
       <div class="col-md-6">
         <figure>
@@ -50,6 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     addButton.addEventListener("click", () => {
       const productId = addButton.getAttribute("data-product-id");
       addToCart(productId, 1);
+      createFlyToCartAnimation(addButton);
     });
   } catch (error) {
     console.error("Failed to load product details:", error);

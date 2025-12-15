@@ -117,5 +117,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     render();
   });
 
+  const clearCartBtn = document.getElementById("clear-cart-btn");
+  if (clearCartBtn) {
+    clearCartBtn.addEventListener("click", () => {
+      // Ask for confirmation before clearing
+      if (confirm("Are you sure you want to clear your entire cart?")) {
+        saveCart([]); // Save an empty array to clear the cart
+        render(); // Re-render the UI
+      }
+    });
+  }
+
   render();
 });

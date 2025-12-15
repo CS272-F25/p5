@@ -170,3 +170,12 @@ input[type="range"]::-moz-range-track {
   background: var(--pp-primary-soft);
   border-radius: 4px;
 }
+
+/* Fly-to-cart animation clone */
+.flying-product-clone {
+  position: fixed;
+  z-index: 1050; /* High z-index to be on top of everything */
+  transition: top 0.5s ease-in, left 0.5s ease-in, transform 0.5s ease-in, opacity 0.5s ease-out;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}

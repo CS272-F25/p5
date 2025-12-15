@@ -1,6 +1,6 @@
 
 import { fetchProducts } from "./data.js";
-import { formatPrice, addToCart } from "./global.js";
+import { formatPrice, addToCart, createFlyToCartAnimation } from "./global.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!button) return;
       const productId = button.getAttribute("data-product-id");
       addToCart(productId, 1);
+      createFlyToCartAnimation(button);
     });
   } catch (error) {
     console.error("Failed to fetch products for index page:", error);

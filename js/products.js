@@ -1,6 +1,6 @@
 
 import { fetchProducts } from "./data.js";
-import { formatPrice, addToCart } from "./global.js";
+import { formatPrice, addToCart, createFlyToCartAnimation } from "./global.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const listEl = document.getElementById("product-list");
@@ -54,8 +54,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             <p class="product-card-text">${product.shortDescription}</p>
             <p class="product-card-price">${formatPrice(product.price)}</p>
             <footer class="product-card-actions">
-              <a href="product.html?id=${encodeURIComponent(product.id)}" class="btn btn-outline-secondary btn-sm">View details</a>
-              <button type="button" class="btn btn-primary btn-sm" data-product-id="${product.id}">Add to cart</button>
+              <a href="product.html?id=${encodeURIComponent(
+                product.id
+              )}" class="btn btn-outline-secondary btn-sm">View details</a>
+              <button type="button" class="btn btn-primary btn-sm" data-product-id="${
+                product.id
+              }">Add to cart</button>
             </div>
           </div>
         </article>
@@ -63,7 +67,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       listEl.appendChild(col);
     });
 
-    countEl.textContent = `${filtered.length} product${filtered.length === 1 ? "" : "s"} found.`;
+    countEl.textContent = `${filtered.length} product${
+      filtered.length === 1 ? "" : "s"
+    } found.`;
   }
 
   try {
@@ -92,10 +98,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!button) return;
       const productId = button.getAttribute("data-product-id");
       addToCart(productId, 1);
+      createFlyToCartAnimation(button);
     });
   } catch (error) {
     console.error("Failed to load products for product list page:", error);
-    listEl.innerHTML = '<p class="text-danger">Failed to load products. Please try again later.</p>';
+    listEl.innerHTML =
+      '<p class="text-danger">Failed to load products. Please try again later.</p>';
     countEl.textContent = "0 products found.";
   }
 });
