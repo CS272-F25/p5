@@ -28,13 +28,26 @@
             <li class="nav-item"><a class="nav-link" href="reviews.html">Reviews</a></li>
             <li class="nav-item"><a class="nav-link" href="about.html">About & Contact</a></li>
             <div id="auth-links" class="d-flex"></div>
-            <li class="nav-item">
-              <a class="nav-link position-relative" href="cart.html" aria-label="Shopping cart">
+            <li class="nav-item dropdown" id="cart-dropdown-container">
+              <a class="nav-link dropdown-toggle position-relative" href="cart.html" id="cart-dropdown-toggle" role="button" aria-expanded="false">
                 <span aria-hidden="true">Cart</span>
                 <span id="cart-count-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
                   0
                 </span>
               </a>
+              <div class="dropdown-menu dropdown-menu-end cart-dropdown-menu" aria-labelledby="cart-dropdown-toggle">
+                <div id="mini-cart-items">
+                  <!-- JS will fill this -->
+                  <p class="text-center text-muted small p-2">Your cart is empty.</p>
+                </div>
+                <div class="p-2 border-top">
+                    <div class="d-flex justify-content-between small mb-2">
+                        <strong>Subtotal:</strong>
+                        <span id="mini-cart-subtotal">$0.00</span>
+                    </div>
+                    <a href="cart.html" class="btn btn-primary btn-sm w-100">Go to Cart</a>
+                </div>
+              </div>
             </li>
           </ul>
         </div>

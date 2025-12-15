@@ -5,6 +5,7 @@
  */
 
 import { isLoggedIn, logoutUser } from "./auth.js";
+import { fetchProducts } from "./data.js";
 
 /**
  * Key for storing cart data in localStorage.
@@ -48,13 +49,60 @@ export function getCart() {
 }
 
 /**
- * Saves the provided cart array to localStorage and updates the cart badge.
+ * Saves the provided cart array to localStorage and updates the cart badge and mini cart.
  * @param {Array<Object>} cart The array of cart items to save.
  */
 export function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
   updateCartBadge(cart);
+  renderMiniCart(); // Update dropdown on every change
 }
+
+/**
+ * Renders the items in the mini-cart dropdown.
+ */
+export async function renderMiniCart() {
+  const itemsContainer = document.getElementById("mini-cart-items");
+  const subtotalEl = document.getElementById("mini-cart-subtotal");
+  if (!itemsContainer || !subtotalEl) return;
+
+  const cart = getCart();
+  if (cart.length === 0) {
+    itemsContainer.innerHTML = `<p class="text-center text-muted small p-2">Your cart is empty.</p>`;
+    subtotalEl.textContent = formatPrice(0);
+    return;
+  }
+
+  try {
+    const products = await fetchProducts();
+    itemsContainer.innerHTML = ""; // Clear existing items
+    let subtotal = 0;
+
+    cart.forEach((item) => {
+      const product = products.find((p) => p.id === item.productId);
+      if (!product) return;
+
+      subtotal += product.price * item.quantity;
+
+      const itemEl = document.createElement("div");
+      itemEl.className = "mini-cart-item";
+      itemEl.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <div class="mini-cart-item-details">
+          <span class="mini-cart-item-title">${product.name}</span>
+          <span class="text-muted">${item.quantity} x ${formatPrice(product.price)}</span>
+        </div>
+      `;
+      itemsContainer.appendChild(itemEl);
+    });
+
+    subtotalEl.textContent = formatPrice(subtotal);
+  } catch (error) {
+    console.error("Failed to render mini cart:", error);
+    itemsContainer.innerHTML = `<p class="text-center text-danger small p-2">Could not load cart.</p>`;
+  }
+}
+
 
 /**
  * Updates the shopping cart badge in the navigation bar with the total number of items.
@@ -185,4 +233,39 @@ function updateAuthLinks() {
 document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
   updateAuthLinks();
+  renderMiniCart();
+
+  // Add hover listeners for the cart dropdown using Bootstrap's API for proper positioning
+  const cartDropdownContainer = document.getElementById("cart-dropdown-container");
+  const cartDropdownToggle = document.getElementById("cart-dropdown-toggle");
+  if (cartDropdownContainer && cartDropdownToggle) {
+    const dropdown = new bootstrap.Dropdown(cartDropdownToggle);
+
+    cartDropdownContainer.addEventListener("mouseenter", () => {
+      // Small delay to prevent accidental opening when just passing by
+      setTimeout(() => {
+        // Check if the mouse is still over the element
+        if (cartDropdownContainer.matches(":hover")) {
+          dropdown.show();
+        }
+      }, 100);
+    });
+
+    cartDropdownContainer.addEventListener("mouseleave", () => {
+      setTimeout(() => {
+        // Check if the mouse has not re-entered the dropdown menu itself
+        if (!cartDropdownContainer.querySelector(".dropdown-menu").matches(":hover")) {
+          dropdown.hide();
+        }
+      }, 100);
+    });
+
+    // Also hide the dropdown if the mouse leaves the menu itself
+    const dropdownMenu = cartDropdownContainer.querySelector(".dropdown-menu");
+    if(dropdownMenu) {
+      dropdownMenu.addEventListener("mouseleave", () => {
+        dropdown.hide();
+      });
+    }
+  }
 });
