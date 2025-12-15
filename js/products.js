@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const priceEl = document.getElementById("filter-price");
   const priceValueEl = document.getElementById("filter-price-value");
   const searchEl = document.getElementById("filter-search");
+  
+  const quickViewModalEl = document.getElementById("quick-view-modal");
+  const quickViewModal = new bootstrap.Modal(quickViewModalEl);
 
   let products = [];
   let filtered = [];
@@ -46,8 +49,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const col = document.createElement("div");
       col.className = "col-md-4";
       col.innerHTML = `
-        <article class="product-card">
-          <img src="${product.image}" class="card-img-top" alt="${product.name}" width="300" height="200" style="object-fit: cover;">
+        <article class="product-card" data-product-id="${product.id}">
+          <div class="product-image-container">
+            <img src="${product.image}" class="card-img-top" alt="${product.name}" width="300" height="200" style="object-fit: cover;">
+            <button class="btn btn-light btn-sm quick-view-btn" data-product-id="${product.id}">Quick View</button>
+          </div>
           <div class="product-card-body">
             <h3 class="product-card-title">${product.name}</h3>
             <p class="product-card-meta">${product.petTypeLabel} • ${product.categoryLabel}</p>
@@ -57,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <a href="product.html?id=${encodeURIComponent(
                 product.id
               )}" class="btn btn-outline-secondary btn-sm">View details</a>
-              <button type="button" class="btn btn-primary btn-sm" data-product-id="${
+              <button type="button" class="btn btn-primary btn-sm add-to-cart-btn" data-product-id="${
                 product.id
               }">Add to cart</button>
             </div>
@@ -75,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     products = await fetchProducts();
 
-    // Pre-filter from query string (e.g. ?category=dog)
+    // Pre-filter from query string
     const params = new URLSearchParams(window.location.search);
     const petParam = params.get("category");
     if (petParam && ["dog", "cat", "small-pet"].includes(petParam)) {
@@ -94,12 +100,51 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     listEl.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-product-id]");
-      if (!button) return;
-      const productId = button.getAttribute("data-product-id");
-      addToCart(productId, 1);
-      createFlyToCartAnimation(button);
+      const addToCartBtn = event.target.closest(".add-to-cart-btn");
+      const quickViewBtn = event.target.closest(".quick-view-btn");
+
+      if (addToCartBtn) {
+        const productId = addToCartBtn.getAttribute("data-product-id");
+        addToCart(productId, 1);
+        createFlyToCartAnimation(addToCartBtn);
+      }
+
+      if (quickViewBtn) {
+        const productId = quickViewBtn.getAttribute("data-product-id");
+        const product = products.find(p => p.id === productId);
+        if (!product) return;
+
+        const modalBody = quickViewModalEl.querySelector(".modal-body");
+        modalBody.innerHTML = `
+          <div class="row">
+            <div class="col-md-6">
+              <img src="${product.image}" class="img-fluid rounded" alt="${product.name}">
+            </div>
+            <div class="col-md-6">
+              <h3>${product.name}</h3>
+              <p class="text-muted">${product.shortDescription}</p>
+              <h4 class="fw-bold">${formatPrice(product.price)}</h4>
+              <p class="small"><strong>Size:</strong> ${product.size}</p>
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-primary add-to-cart-modal-btn" data-product-id="${product.id}">Add to Cart</button>
+                <a href="product.html?id=${encodeURIComponent(product.id)}" class="btn btn-outline-secondary btn-sm">View Full Details</a>
+              </div>
+            </div>
+          </div>
+        `;
+        quickViewModal.show();
+      }
     });
+
+    quickViewModalEl.addEventListener('click', (event) => {
+        const addToCartModalBtn = event.target.closest('.add-to-cart-modal-btn');
+        if (addToCartModalBtn) {
+            const productId = addToCartModalBtn.getAttribute('data-product-id');
+            addToCart(productId, 1);
+            quickViewModal.hide();
+        }
+    });
+
   } catch (error) {
     console.error("Failed to load products for product list page:", error);
     listEl.innerHTML =

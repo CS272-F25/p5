@@ -45,3 +45,30 @@
   display: flex;      /* d-flex equivalent */
   gap: 0.5rem;        /* gap-2 equivalent */
 }
+
+/* Styles for Quick View */
+.product-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-view-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.product-image-container:hover .quick-view-btn {
+  opacity: 1;
+}
+
+.product-image-container:hover .card-img-top {
+  transform: scale(1.05);
+  filter: brightness(0.8);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
