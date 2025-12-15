@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("article");
       card.className = "review-card border p-3";
       card.innerHTML = `
-        <div class="d-flex justify-content-between align-items-center mb-1">
+        <header class="d-flex justify-content-between align-items-center mb-1">
           <h2 class="h6 mb-0">${review.name}</h2>
           <span class="review-rating" aria-label="${review.rating} out of 5 stars">
             ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}

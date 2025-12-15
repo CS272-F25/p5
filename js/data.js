@@ -1,11 +1,17 @@
-// js/data.js
+/**
+ * @file Manages product data fetching and caching for the Pet Pantry Online application.
+ * This module ensures product data is fetched efficiently and made available across the site.
+ */
 
 let productsCache = null;
 
 /**
- * Fetches product data from products.json.
- * Caches the result to avoid multiple fetches.
- * @returns {Promise<Array>} A promise that resolves with an array of product objects.
+ * Fetches product data from `data/products.json`.
+ * Implements a caching mechanism to prevent redundant network requests once data is loaded.
+ *
+ * @returns {Promise<Array<Object>>} A promise that resolves with an array of product objects.
+ *   Each product object is expected to have properties like `id`, `name`, `price`, etc.
+ * @throws {Error} Throws an error if the network request fails or the response is not OK.
  */
 export async function fetchProducts() {
   if (productsCache) {
@@ -22,8 +28,7 @@ export async function fetchProducts() {
     return productsCache;
   } catch (error) {
     console.error("Error fetching products:", error);
-    // Depending on the desired behavior, you might want to rethrow the error
-    // or return an empty array/null to indicate failure.
+    // Re-throw the error to allow calling functions to handle it.
     throw error;
   }
 }

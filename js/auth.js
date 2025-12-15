@@ -20,22 +20,24 @@ function getUsers() {
 
 /**
  * Saves the users array to localStorage.
- * @param {Array} users The array of user objects.
+ * @param {Array<Object>} users The array of user objects, each with a `username` and `password`.
  */
 function saveUsers(users) {
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
 }
 
 /**
- * "Logs in" a user by setting a value in localStorage.
- * @param {string} username The username to log in.
+ * "Logs in" a user by setting their username in localStorage.
+ * This acts as a session for the front-end only account system.
+ * @param {string} username The username of the user to log in.
  */
 function loginUser(username) {
   localStorage.setItem(CURRENT_USER_KEY, username);
 }
 
 /**
- * "Logs out" the current user by removing the value from localStorage.
+ * "Logs out" the current user by removing their username from localStorage.
+ * Redirects to the login page after logout.
  */
 export function logoutUser() {
   localStorage.removeItem(CURRENT_USER_KEY);
@@ -43,15 +45,15 @@ export function logoutUser() {
 }
 
 /**
- * Gets the currently logged-in user's username.
- * @returns {string|null} The username or null if not logged in.
+ * Gets the currently logged-in user's username from localStorage.
+ * @returns {string|null} The username if a user is logged in, otherwise null.
  */
 export function getLoggedInUser() {
   return localStorage.getItem(CURRENT_USER_KEY);
 }
 
 /**
- * Checks if a user is currently logged in.
+ * Checks if a user is currently logged in based on the presence of a username in localStorage.
  * @returns {boolean} True if a user is logged in, false otherwise.
  */
 export function isLoggedIn() {
@@ -59,8 +61,7 @@ export function isLoggedIn() {
 }
 
 
-// --- Event Listeners for different pages ---
-
+// --- DOMContentLoaded Event Listener for Page-Specific Logic ---
 document.addEventListener("DOMContentLoaded", () => {
   // --- Registration Page Logic ---
   const registerForm = document.getElementById("register-form");

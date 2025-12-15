@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <h3 class="product-card-title">${product.name}</h3>
             <p class="product-card-meta">${product.petTypeLabel} • ${product.categoryLabel}</p>
             <p class="product-card-price">${formatPrice(product.price)}</p>
-            <div class="product-card-actions">
+            <footer class="product-card-actions">
               <a href="product.html?id=${encodeURIComponent(product.id)}" class="btn btn-outline-secondary btn-sm">View details</a>
               <button type="button" class="btn btn-primary btn-sm" data-product-id="${product.id}">Add to cart</button>
             </div>
